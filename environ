@@ -1,0 +1,5 @@
+ROOT="$HOME/dcache"
+ERL_TOP="/usr/lib/erlang"
+YAWS="usr/lib/yaws"
+ERL="erl"
+export ERL_COMPILER_OPTIONS="[debug_info]"

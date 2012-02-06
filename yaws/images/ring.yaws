@@ -1,0 +1,4 @@
+<erl>
+    out(Args) ->
+        controller:chord_png(Args).
+</erl>

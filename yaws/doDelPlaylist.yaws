@@ -1,0 +1,11 @@
+<erl>
+    out(Args) ->
+        controller:del(yaws_api:parse_post(Args)),
+        Node = case postvar(Args, "node") of
+                   {ok, TheNode} ->
+                       TheNode;
+                   _ ->
+                       ""
+               end,
+        {redirect, "admin.yaws?node=" ++ Node}.
+</erl>

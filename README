@@ -1,0 +1,10 @@
+This is an implementation of a client/server content distribution
+network where clients consist of non-interactive reproduction playlists.
+The distribution of content is handled using the Chord algorithm (a
+distributed hash table).
+
+A web interface developed with yaws-1.68 shows the inner workings of the
+DHT.
+
+This code is the result of my Computer Science degree thesis and may be
+helpful for people implementing a P2P system in Erlang.

@@ -1,0 +1,5 @@
+<erl>
+    out(Args) ->
+        controller:parar(yaws_api:parse_post(Args)),
+        {redirect, "index.yaws"}.
+</erl>

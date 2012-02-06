@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html;
+     charset=iso-8859-1" />
+     <title>dcache</title>
+     <link rel="stylesheet" href="styles/style.css" type="text/css"
+     media="screen" />
+<script language="javascript" src="/javascript/utils.js"></script>
+    </head>
+
+
+<body>
+<div id="content">
+<erl>
+    list([], _Mode) ->
+        "";
+    list([H|T], Mode) ->
+        line(H, Mode) ++ list(T, Mode).
+
+    num(N) ->
+        Num = integer_to_list(N),
+        case length(Num) of
+            1 ->
+                "0" ++ Num;
+            _ ->
+                Num
+        end.
+
+    line(nil, _) ->
+        "";
+    line({ListId, Name, {H, M}, _State}, Mode) ->
+        "<tr class=\"" ++ Mode ++ "\"><td>" ++ ListId ++ "</td><td>" ++ Name  ++ "</td>" ++
+            "<td>" ++ num(H) ++ ":" ++ num(M) ++ "</td></tr>".
+
+    splitactual([], Sche) ->
+        {lists:reverse(Sche), nil, []};
+    splitactual([{_, _, T, _} = Actual], Sche) ->
+        {_, {Hour, Min, _}} = calendar:now_to_local_time(now()),
+        case T =< {Hour, Min} of
+            true ->
+                {lists:reverse(Sche), Actual, []};
+            false ->
+                {lists:reverse(Sche), nil, [Actual]}
+        end;
+    splitactual([{_, _, T1, _} = Actual1, {_, _, T2, _} = Actual2 |Rest], Sche) ->
+        {_, {Hour, Min, _}} = calendar:now_to_local_time(now()),
+        case T2 =< {Hour, Min} of
+            true ->
+                splitactual([Actual2|Rest], [Actual1|Sche]);
+            false ->
+                {lists:reverse(Sche), Actual1, [Actual2|Rest]}
+        end.
+
+    playlist() ->
+        List = controller:get_playlist(),
+        {Played, Actual, Rest} = splitactual(List, []),
+        {list(Played, "played") ++ line(Actual, "current") ++ list(Rest, "rest"), Actual}.
+
+    playlist(Node) ->
+        List = controller:get_playlist(Node),
+        {Played, Actual, Rest} = splitactual(List, []),
+        {list(Played, "played") ++ line(Actual, "current") ++ list(Rest, "rest"), Actual}.
+
+    out(Args) ->
+        {TheNode, Table, Actual} = case queryvar(Args, "node") of
+                              {ok, "0"} ->
+                                  {PlayList, Actual} = playlist(),
+                                  {nil, "<table class=\"global-playlist-cliente\"><th>ListId</th><th>Nome</th><th>Timestamp</th>" ++ PlayList ++ "</table>", Actual};
+                              {ok, Node} ->
+                                  {PlayList, Actual} = playlist(Node),
+                                  {Node, "<table class=\"global-playlist-cliente\"><th>ListId</th><th>Nome</th><th>Timestamp</th>" ++ PlayList ++ "</table>", Actual};
+                              _ ->
+                                  {PlayList, Actual} = playlist(),
+                                  {nil, "<table class=\"global-playlist-cliente\"><th>ListId</th><th>Nome</th><th>Timestamp</th>" ++ PlayList ++ "</table>", Actual}
+                          end,
+        Name = case Actual of
+                   nil ->
+                       "";
+                   {_, N, _, _} ->
+                       N
+               end,
+        {A, B, C} = now(),
+        random:seed(A, B, C),
+        %N = case TheNode of
+        %        nil -> atom_to_list(node());
+        %        _ -> Node
+        %    end,
+        {ok, Na} = storage.registry:name(TheNode),
+        {ok, Host} = inet:gethostname(),
+        Path = Na ++ "@" ++ Host ++ "/" ++ Name ++ "?" ++ integer_to_list(random:uniform(1000000)),
+        {html, "<div id=\"playlist\">" ++ Table ++ "</div>" ++
+               "<div id=\"imagen-actual\">" ++
+    	           "<img class=\"client\" src=\"" ++ Path ++ "\" />" ++
+               "</div>"}.
+</erl>
+</div>
+</body>
+
+</html>

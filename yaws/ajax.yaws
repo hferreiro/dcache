@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>Simple Ajax Example</title>
+
+<script language="Javascript">
+  function getXMLHttpRequest() {
+    var xmlHttpReq = false;
+    if (window.XMLHttpRequest) {
+      xmlHttpReq = new XMLHttpRequest();
+    }
+    else if (window.ActiveXObject) {
+      xmlHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    return xmlHttpReq;
+  }
+
+  function xmlhttpPost(xmlHttpReq, URL, callback) {
+    xmlHttpReq.open('POST', URL, true);
+    xmlHttpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xmlHttpReq.onreadystatechange = function() {
+      if (xmlHttpReq.readyState == 4) {
+        callback(xmlHttpReq.responseText);
+      }
+    }
+    xmlHttpReq.send('');  // TODO: tomar los parametros opcionales por argumento y mandarlos en el POST
+  }
+
+
+  xmlHttpReqTime = getXMLHttpRequest();
+  function updateTime() {
+    xmlhttpPost(xmlHttpReqTime, "/ajaxTime.yaws",
+                function(result) {
+                  document.getElementById("time").innerHTML = result;
+                  setTimeout("updateTime()", 1000);
+                });
+  }
+
+  xmlHttpReqMemory = getXMLHttpRequest();
+  function updateMemory() {
+    xmlhttpPost(xmlHttpReqMemory, "/ajaxMemory.yaws",
+                function(result) {
+                  document.getElementById("memory").innerHTML = result;
+                });
+  }
+
+</script>
+</head>
+
+<body>
+
+<ul>
+  <li><b>erlang:now()</b> <div id="time">-</div></li>
+  <li><b>erlang:memory()</b> [<a href="javascript:updateMemory()">update</a>] <div id="memory">-</div></li>
+</ul>
+
+<script language="Javascript">
+  updateTime();
+  updateMemory();
+</script>
+
+</html>

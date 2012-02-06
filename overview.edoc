@@ -1,0 +1,8 @@
+@author Henrique Ferreiro <hferreiro@udc.es>
+@copyright 2007 Henrique Ferreiro
+@version 0.1
+@title dcache documentation
+
+@doc
+dcache - distributed cache application
+@end

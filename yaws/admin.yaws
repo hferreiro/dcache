@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html;
+     charset=iso-8859-1" />
+     <title>dcache</title>
+     <link rel="stylesheet" href="styles/style.css" type="text/css"
+     media="screen" />
+     <script language="javascript" src="javascript/utils.js"></script>
+    </head>
+
+
+<body>
+
+<erl>
+    out(Args) ->
+        Prim = "<div id=\"wrapper\">" ++
+        "<div id=\"menu\">" ++
+            "<ul>" ++
+                "<li><a href=\"/index.yaws\">Principal</a></li>" ++
+                "<li><a href=\"/client.yaws?node=",
+        Sec = "\">Cliente</a></li>" ++
+                "</ul>" ++
+                "</div>" ++
+                "<div id=\"playlist\"> </div>" ++
+                "<div id=\"server-form\">" ++
+                    "<p> Configurar o servidor:</p>" ++
+                    "<form id=\"servers\" name=\"servers\" action=\"mediaserver.yaws\">" ++
+                    "<input type=\"hidden\" name=\"node\" value=\"",
+        PenUlt = "\" /> <p class=\"label\">Servidor: <input type=\"text\" name=\"server\" size=\"16\"/><br /> </p>" ++
+            "<p class=\"label\">Porto: &nbsp;&nbsp;&nbsp;<input type=\"text\" name=\"port\" size=\"5\" > <br /></p> <input type=\"submit\" value=\"&nbsp;&nbsp; Ir &nbsp;&nbsp;\" /> </form>" ++
+            "<br />" ++ "<form method=\"post\" name=\"delplaylist\" action=\"doDelPlaylist.yaws\">" ++
+            "<p class=\"label\"> ListId: <input type=\"text\" name=\"listid\" size=\"6\" /></p>" ++
+            "<input type=\"submit\" value=\"Eliminar\" />" ++
+            "<input type=\"hidden\" name=\"node\" value=\"",
+        Ult = "\" /></form>" ++
+              "</div>",
+        Reload = case queryvar(Args, "node") of
+                     {ok, Node} ->
+                         "<script language=\"Javascript\">
+                              updatePlayListAdmin(" ++ Node ++ ");
+                          </script>" ++ Prim ++ Node ++ Sec ++ Node ++ PenUlt ++ Node ++ Ult;
+                     _ -> "<script language=\"Javascript\">
+                               updatePlayListAdmin(0);
+                           </script>" ++ Prim ++ Sec ++ PenUlt ++ Ult
+                 end,
+        {html, Reload}.
+</erl>
+
+<div id="footer">
+    <p>by Henrique Ferreiro Garc&iacute;a</p>
+</div>
+</div>
+</body>
+
+</html>

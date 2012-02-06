@@ -1,0 +1,29 @@
+#!/bin/bash
+
+###############################################################################
+## Configuration
+###############################################################################
+
+[[ -f "environ" ]] && . "environ"
+
+pushd `dirname $0` > /dev/null 2>&1
+
+SNAME=registry@`hostname`
+
+mkdir -p $ROOT/priv/log
+mkdir -p $ROOT/priv/files
+
+SASL_LOG_FILE=$ROOT/priv/$SNAME/log/sasl.log
+$ERL \
+    -boot start_sasl \
+    -sname $SNAME \
+    -sasl sasl_error_logger \{file,\"$SASL_LOG_FILE\"\} \
+-pa $ROOT/ebin \
+    -storage_conf config_file_name $ROOT/storage.conf \
+    -detached -noshell \
+    -s storage.registry start_link \
+    -smp auto
+
+popd > /dev/null 2>&1
+
+exit 0

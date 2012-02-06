@@ -1,0 +1,4 @@
+<erl>
+    out(Args) -> 
+        {html, lists:flatten(io_lib:format("~w", [erlang:now()]))}.
+</erl>

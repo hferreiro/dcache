@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html;
+     charset=iso-8859-1" />
+     <title>dcache</title>
+     <link rel="stylesheet" href="styles/style.css" type="text/css"
+     media="screen" />
+<script language="javascript" src="/javascript/utils.js"></script>
+    </head>
+
+
+<body>
+<div id="content">
+<erl>
+    list([], _Mode) ->
+        "";
+    list([H|T], Mode) ->
+        line(H, Mode) ++ list(T, Mode).
+
+    num(N) ->
+        Num = integer_to_list(N),
+        case length(Num) of
+            1 ->
+                "0" ++ Num;
+            _ ->
+                Num
+        end.
+
+    line(nil, _) ->
+        "";
+%            "<td><div class=\"graph\"><strong class=\"bar\" style=\"width:num%\">" ++ State ++ "</strong></div></td>" ++
+    line({ListId, Name, {H, M}, State}, Mode) ->
+        "<tr class=\"" ++ Mode ++ "\"><td>" ++ ListId ++ "</td><td>" ++ Name  ++ "</td>" ++
+            "<td>" ++ num(H) ++ ":" ++ num(M) ++ "</td>" ++
+            "<td>" ++ State ++ "</td>" ++
+	    "<td><input type=\"hidden\" name=\"eliminar\" value=\"" ++ Name ++ 
+		    "\"<input type=\"submit\" value=\"eliminar\" /></td></tr>".
+
+    splitactual([], Sche) ->
+        {lists:reverse(Sche), nil, []};
+    splitactual([{_, _, T, _} = Actual], Sche) ->
+        {_, {Hour, Min, _}} = calendar:now_to_local_time(now()),
+        case T =< {Hour, Min} of
+            true ->
+                {lists:reverse(Sche), Actual, []};
+            false ->
+                {lists:reverse(Sche), nil, [Actual]}
+        end;
+    splitactual([{_, _, T1, _} = Actual1, {_, _, T2, _} = Actual2 |Rest], Sche) ->
+        {_, {Hour, Min, _}} = calendar:now_to_local_time(now()),
+        case T2 =< {Hour, Min} of
+            true ->
+                splitactual([Actual2|Rest], [Actual1|Sche]);
+            false ->
+                {lists:reverse(Sche), Actual1, [Actual2|Rest]}
+        end.
+
+    playlist() ->
+        List = controller:get_playlist(),
+        {Played, Actual, Rest} = splitactual(List, []),
+        list(Played, "rest") ++ line(Actual, "rest") ++ list(Rest, "rest").
+
+    playlist(Node) ->
+        List = controller:get_playlist(Node),
+        {Played, Actual, Rest} = splitactual(List, []),
+        list(Played, "played") ++ line(Actual, "current") ++ list(Rest, "rest").
+
+    out(Args) ->
+        case queryvar(Args, "node") of
+            {ok, "0"} ->
+	    {html, "<form method=\"get\" action=\"doEliminarItem.yaws\" name=\"eliminarItem\"><table class=\"global-playlist-admin\"><th>ListId</th><th>Nome</th><th>Timestamp</th><th>Estado</th><th></th>" ++ playlist() ++ "</table></form>"};
+            {ok, Node} ->
+	    {html, "<form method=\"post\" action=\"doEliminarItem.yaws\" name=\"eliminarItem\"><table class=\"global-playlist-admin\"><th>ListId</th><th>Nome</th><th>Timestamp</th><th>Estado</th><th></th>" ++ playlist(Node) ++ "</table></form>"};
+            _ ->
+	    {html, "<form method=\"post\" action=\"doEliminarItem.yaws\" name=\"eliminarItem\"><table class=\"global-playlist-admin\"><th>ListId</th><th>Nome</th><th>Timestamp</th><th>Estado</th><th></th>" ++ playlist() ++ "</table></form>"}
+        end.
+</erl>
+
+</body>
+
+</html>

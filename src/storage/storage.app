@@ -1,0 +1,10 @@
+{application, storage,
+   [{description, "Distributed storage"},
+    {vsn, "1.0"},
+    {modules, [storage.storage_app,
+               storage.storage_sup,
+               storage.storage]},
+    {registered, [storage.storage_app, storage.storage_sup]},
+    {applications, [kernel, stdlib]},
+    {env, []},
+    {mod, {storage.storage_app, []}}]}.

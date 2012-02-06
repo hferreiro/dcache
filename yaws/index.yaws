@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html;
+     charset=iso-8859-1" />
+     <title>dcache</title>
+     <link rel="stylesheet" href="styles/style.css" type="text/css"
+     media="screen" />
+     <script language="javascript" src="javascript/utils.js"></script>
+    </head>
+
+
+<body>
+
+    <div id="wrapper">
+    <!--<div id="header">
+        <h1><i>dcache</i></h1>
+    </div>-->
+
+    <div id="menu">
+        <ul>
+	    <li><a href="/client.yaws">Cliente</a></li>
+        <li><a href="/admin.yaws">Administraci&oacute;n</a></li>
+        </ul>
+    </div>
+<div id="content-index-left">
+<form name="arranque" method="post" action="doArrancar.yaws">
+   <input type="submit" value="Novo" />
+   <input type="text" name="porto" size="4" value="Porto"/>
+</form>
+
+<form name="parada" method="post" action="doParar.yaws">
+    <input type="submit" value="Parar" />
+    <input type="text" name="nodo" size="4" value="Nodo"/>
+</form>
+</div>
+
+<div id="graph"> </div>
+<div id="footer">
+    <p>by Henrique Ferreiro Garc&iacute;a</p>
+</div>
+</div>
+</body>
+
+<script language="Javascript">
+    updateGraph();
+</script>
+
+</html>

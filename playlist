@@ -1,0 +1,75 @@
+#!/bin/bash
+
+###############################################################################
+## Configuration
+###############################################################################
+
+[[ -f "environ" ]] && . "environ"
+
+###############################################################################
+
+pushd `dirname $0` > /dev/null 2>&1
+
+SNAME=dcache@`hostname`
+YAWS_CONF=""
+if [ $# -gt 1 ]
+then
+  SNAME=$2@`hostname`
+  if [ $# -gt 2 ]
+  then
+      YAWS_CONF="-storage_conf yaws_port $3"
+  fi
+fi
+
+mkdir -p $ROOT/log
+mkdir -p $ROOT/files
+ln -fs $ROOT/files/$SNAME $ROOT/yaws/$SNAME
+mkdir -p $ROOT/priv/log
+mkdir -p $ROOT/priv/files
+
+./registry
+
+case "$1" in
+
+  start)
+    $ERL \
+        -boot start_sasl \
+        -yaws embedded true $YAWS_CONF -pa $YAWS_EBIN \
+        -sname $SNAME \
+	-pa $ROOT/ebin \
+        -storage_conf config_file_name $ROOT/storage.conf \
+        -s playlist start \
+        -smp auto
+    ;;
+
+  daemon)
+    SASL_LOG_FILE=$ROOT/priv/$SNAME/log/sasl.log
+    $ERL \
+        -boot start_sasl \
+        -yaws embedded true $YAWS_CONF -pa $YAWS_EBIN \
+        -sname $SNAME \
+        -sasl sasl_error_logger \{file,\"$SASL_LOG_FILE\"\} \
+	-pa $ROOT/ebin \
+        -storage_conf config_file_name $ROOT/storage.conf \
+        -detached -noshell \
+        -s playlist start \
+        -smp auto
+    ;;
+
+  stop)
+    $ERL -sname noname@`hostname` \
+	-pa $ROOT/ebin \
+        -detached -noshell \
+        -s playlist stop $SNAME \
+        -s init stop \
+        -smp auto
+    ;;
+
+  *)
+    echo "Use: $0 { start [name] [port] | daemon [name] [port] }"
+    exit 1
+esac
+
+popd > /dev/null 2>&1
+
+exit 0

@@ -1,0 +1,326 @@
+/* Generic Styling */
+
+body {
+	background-color: #777777;
+	font-family:"Trebuchet MS" Arial, Helvetica, sans-serif;
+	font-size:62.5%; /* Sets default font size to 10px */
+	color:#222222;
+	margin:0 auto;
+	}
+* {
+	margin:0;
+	padding:0;
+	}
+
+img {
+	border:0;
+	}
+
+p {
+	margin-bottom:1.75em;
+	}
+
+div#server-form  p {
+    margin-bottom:5px;
+    font-size:150%;
+    font-weight:bold;
+}
+
+div#server-form p.label {
+    font-size:130%;
+    font-weight:bold;
+}
+
+a {
+	text-decoration:none;
+	color:#B4C835;
+	}
+a:hover {
+	text-decoration:none;
+	color:#6CC7DC;
+	}
+
+
+/* Structure */
+
+#wrapper {
+    background: url(images/bg.png) transparent;
+	margin:0 auto;
+	padding:2px 4px;
+	width:75%;
+	font-size:1.20em;
+	color:white;
+	}
+
+#header {
+	height:80px;
+}
+
+#content {
+    padding:10px 10px;
+    text-align:justify;
+    line-height:1.75em;
+    float:left;
+    width:60%;
+
+    min-height:150px;
+}
+#content-index {
+    padding:10px 10px;
+    line-height:1.75em;
+    min-height:150px;
+    text-align:center;
+}
+#content-index-left {
+    width:15%;
+    padding:10px 10px;
+    line-height:1.75em;
+    min-height:150px;
+    text-align:center;
+    float:left;
+}
+
+#graph {
+    width:85%;
+    padding:10px 10px;
+    line-height:1.75em;
+    min-height:150px;
+    text-align:center;
+    float:center;
+}
+
+#client-image {
+    float:right;
+    width:25%;
+}
+
+#sever-form {
+    float:right;
+    width:25%;
+}
+#imagen-actual {
+	width:15%;
+	float:center;
+}
+
+#footer {
+	clear:both;
+	margin-top:25px;
+    padding-top:1.5em;
+    border-top:2px #000 solid;
+	}
+
+
+#menu {
+    width:100%;
+	padding:3px 0px;
+	}
+
+
+
+#menu ul {
+background-image: url("images/menu.gif");
+background-color: #333;
+list-style: none;
+font-size: 14px;
+font-weight: bold;
+width: 100%;
+height: 30px;
+}
+
+#menu ul li a:link, #menu ul li a:visited {
+background-image: url("images/menu.gif");
+background-repeat: repeat;
+background-position: 0 0;
+color: #FFF;
+padding: 5px 15px;
+float: left;
+text-decoration: none;
+}
+
+#menu ul li a:hover, #menu ul li a:active {
+color: #000;
+background-position: 0 -30px;
+background-color: #CCC;
+height: 20px;
+}
+
+
+/* Footer */
+
+#footer-valid {
+	float:left;
+	padding-top:55px;
+	padding-left:20px;
+	cursor:default;
+	color:#ffffff;
+	}
+#footer-valid a {
+	color:#ffffff;
+	text-decoration:none;
+	}
+#footer-valid a:hover {
+	color:#ffffff;
+	text-decoration:underline;
+	}
+
+
+/* Heading's */
+
+h1 {
+	font-size:5.5em;
+	font-weight:bold;
+	cursor:default;
+	position:relative;
+	letter-spacing:1px;
+	color:#bbbbbb;
+	font-style:italic;
+	text-align:center;
+	text-decoration:underline;
+	padding-top:20px;
+	}
+
+
+/*formularios*/
+
+input, select, textarea {
+ margin-top:3px;
+ border: #062d03 2px solid; 
+}
+
+input.mo {
+ 
+}
+
+input.txt {
+    width:40px;
+    text-align:center;
+
+}
+/*tablas*/
+
+
+table.global-playlist-cliente {
+    width:100%;
+    color:white;
+}
+
+
+table.global-playlist-cliente th {
+    font-size:150%;
+    font-weight:bold;
+    border-bottom:2px solid #fff;
+}
+
+table.global-playlist-cliente td {
+    font-size:120%;
+}
+
+table.global-playlist-cliente tr.played {
+    color:#888888;
+}
+
+table.global-playlist-cliente tr.current {
+    color:#34cd2c;
+}
+
+table.global-playlist-cliente tr.rest {
+   color:white;
+}
+
+
+
+table.global-playlist-admin {
+    width:100%;
+    color:white;
+}
+
+
+table.global-playlist-admin th {
+    font-size:150%;
+    font-weight:bold;
+    border-bottom:2px solid #fff;
+}
+
+table.global-playlist-admin td {
+    font-size:120%;
+}
+
+
+
+table.server-list {
+    width:95%;
+    color:white;
+}
+
+
+table.server-list th {
+    font-size:150%;
+    font-weight:bold;
+    border-bottom:2px solid #fff;
+    text-align:left;
+}
+
+table.server-list td {
+    font-size:120%;
+    text-align:left;
+}
+
+table.server-list th.sel {
+	width:5%;
+}
+
+/*frames*/
+
+#playlist-cliente {
+width:95%;
+overflow:hidden;
+border:0;
+float:left;
+}
+
+
+#playlist {
+width:60%;
+overflow:hidden;
+border:0;
+float:left;
+}
+
+img {
+}
+
+img.client {
+    width:250px;
+    height:250px;
+    border:#000 solid 1px;
+}
+
+#imagen-actual {
+    float:right;
+}
+
+/* barra de progreso */
+.graph {
+    position:relative;
+    width:200px;
+    border:1px solid #b1d632;
+    padding:2px;
+}
+
+.graph .bar {
+    display:block;
+    position:relative;
+    background:#b1d632;
+    text-align:center;
+    color:#333;
+    height:2em;
+    line-height:2em;
+}
+
+.graph .bar span {
+    position:absolute;
+    left:1em;
+}
+
+}

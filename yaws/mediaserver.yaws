@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html;
+     charset=iso-8859-1" />
+     <title>dcache</title>
+     <link rel="stylesheet" href="styles/style.css" type="text/css"
+     media="screen" />
+     <script language="javascript" src="javascript/utils.js"></script>
+    </head>
+
+
+<body>
+
+    <div id="wrapper">
+    <!--<div id="header">
+        <h1><i>dcache</i></h1>
+    </div>-->
+
+    <div id="menu">
+        <ul>
+            <li><a href="/index.yaws">Principal</a></li>
+            <li><a href="/admin.yaws">Administraci&oacute;n</a></li>
+            <li><a href="/client.yaws">Cliente</a></li>
+        </ul>
+    </div>
+
+    <div id="content">
+<erl>
+    list([]) ->
+        "";
+    list([H|T]) ->
+        line(H) ++ list(T).
+
+    line({Name, Size}) ->
+    "<tr><td><input type=\"checkbox\" name=\"" ++ Name ++ "chk\" value=\"" ++ Size ++ "\"></td><td>" ++ Name ++ "</td><td>" ++ Size ++ "</td><td><input class=\"txt\" type=\"text\" name=\"" ++ Name ++"txt\" size=\"5\"></input></td><td><input class=\"txt\" type=\"text\" name=\"" ++ Name ++ "listid\" size=\"5\" /></tr>".
+
+    files(Server) ->
+        Files = controller:server(Server),
+        list(Files).
+
+    out(Args) ->
+        Host = case queryvar(Args, "server") of
+                   undefined ->
+                       "localhost";
+                   {ok, Server} ->
+                       Server
+               end,
+        Port = case queryvar(Args, "port") of
+                   undefined ->
+                       "80";
+                   {ok, ThePort} ->
+                       ThePort
+               end,
+        Node = case queryvar(Args, "node") of
+                   undefined ->
+                       "0";
+                   {ok, TheNode} ->
+                       TheNode
+               end,
+	    {html, "<form name=\"mo\" method=\"post\" action=\"doEngadir.yaws\"> <table class=\"server-list\"><th class=\"sel\">Sel</th><th>Nome</th><th>Tama&ntilde;o</th><th>hh:mm</th><th>ListId</th>" ++ files({Host, Port}) ++ 
+			    "</table><br /><input type=\"hidden\" name=\"node\" value=\"" ++ Node ++ "\" />" ++ 
+		    	    "<input class=\"mo\" type=\"submit\" value=\" Engadir \" /></form>"}.
+</erl>
+    </div>
+
+<div id="footer">
+    <p>by Henrique Ferreiro Garc&iacute;a</p>
+</div>
+</div>
+</body>
+
+</html>
